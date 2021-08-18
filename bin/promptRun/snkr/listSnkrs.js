@@ -1,5 +1,6 @@
 const fs = require('fs')
 const { getSnkrsData } = require('./index')
+const { commands } = require('../commands/commands.json')
 
 const listSnkrs = () => {
     try {
@@ -7,10 +8,13 @@ const listSnkrs = () => {
         const snkrsData = getSnkrsData(snkrsFileName)
         const formatedSnkrsData = formatSnkrsData(snkrsData)
 
-        console.table(
-            formatedSnkrsData,
-            ['name', 'size', 'price', 'release']
-        )
+        if(formatedSnkrsData.length) { 
+            console.table(
+                formatedSnkrsData,
+                ['name', 'size', 'price', 'release']
+            )
+        }
+        else { console.log(`\nNo snkears added. Type '${commands.addsnkr}' to add a snkr.\n`) }
     }
     catch (err) {
         console.log(`${err} ✕\n`)

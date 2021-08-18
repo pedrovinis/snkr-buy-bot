@@ -87,3 +87,9 @@ const getTwoFactorValidateResponse = async(page) => {
     const res = await page.waitForSpecificResponse('https://www.nike.com.br/auth/two-factor/validate')
     return res
 }
+
+module.exports = {
+  fetchAddCart,
+  fetchTwoFactorGenerate,
+  fetchTwoFactorValidate
+}

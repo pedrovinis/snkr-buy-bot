@@ -15,7 +15,7 @@ const deleteSnkr = () => {
         const answer = confirmDelete(snkrData)
         if(answer) { 
             deletesnkrFile(fileName)
-            console.log(`'${snkrData.snkr_name}-${snkrData.snkr_size}' successful deleted. \n`)
+            console.log(`'${snkrData.snkr_name} - ${snkrData.snkr_size}' successful deleted. \n`)
         }
     }
     catch (err) {

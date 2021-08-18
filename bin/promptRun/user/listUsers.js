@@ -1,5 +1,6 @@
 const fs = require('fs')
 const { getUsersData } = require('./index')
+const { commands } = require('../commands/commands.json')
 
 const listUsers = () => {
     try {
@@ -7,10 +8,13 @@ const listUsers = () => {
         const usersData = getUsersData(usersFileName)
         const formatedUsersData = formatUsersData(usersData)
 
-        console.table(
-            formatedUsersData,
-            ['name', 'nike_email']
-        )
+        if(formatedUsersData.length > 0) {
+            console.table(
+                formatedUsersData,
+                ['name', 'nike_email']
+            )
+        }
+        else { console.log(`\nNo users added. Type '${commands.adduser}' to add a user.\n`) }
     }
     catch (err) {
         console.log(`${err} ✕\n`)

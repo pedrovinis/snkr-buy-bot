@@ -7,7 +7,8 @@ class User {
             nike_auth_creation: '',
             name: '',
             nike_email: '',
-            nike_password: ''
+            nike_password: '',
+            nike_sms_phone: '',
         }
     }
 
@@ -49,6 +50,14 @@ class User {
 
     getNikePassword() {
         return this.userData['nike_password']
+    }
+
+    setNikeSmsPhone(phoneNumber) {
+        this.userData['nike_sms_phone'] = phoneNumber
+    }
+
+    getNikeSmsPhone() {
+        return this.userData['nike_sms_phone']
     }
 
     saveConfigs() {

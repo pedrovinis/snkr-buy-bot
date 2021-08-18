@@ -9,6 +9,7 @@ let loadAnimation
 
 const addSnkr = async() => {
     console.log('\n')
+    
     const snkr = new Snkr()
 
     askAndSetSnkrLink(snkr)
@@ -23,14 +24,10 @@ const addSnkr = async() => {
         loadAnimation = new LoadingAnimation(['Fetching snkr data',' '],)
         const data = await getAndFormatSnkrData(page)
         loadAnimation.stop('DONE. ✓ ')
+
         console.table(Object.keys(data.sizes))
         askAndSetSnkrSize(snkr, data.sizes)
-        setSnkrName(snkr, data.snkr_name)
-        setSnkrId(snkr, data.snkr_id)
-        setSnkrSizeId(snkr, data.sizes[snkr.getSnkrSize()].ProdutoId)
-        setSnkrSizeCode(snkr, data.sizes[snkr.getSnkrSize()].Codigo)
-        setSnkrSalePrice(snkr, data.snkr_sale_price)
-        setSnkrRelease(snkr, data.snkr_release)
+        setSnkrData(data, snkr)
         
         snkr.saveConfigs()
 
@@ -98,6 +95,20 @@ const setSnkrSize = (snkr, size, sizes) => {
     }
     catch {
         throw new Error('Error on set snkr size.')
+    }
+}
+
+const setSnkrData = (data, snkr) => {
+    try {
+        setSnkrName(snkr, data.snkr_name)
+        setSnkrId(snkr, data.snkr_id)
+        setSnkrSizeId(snkr, data.sizes[snkr.getSnkrSize()].ProdutoId)
+        setSnkrSizeCode(snkr, data.sizes[snkr.getSnkrSize()].Codigo)
+        setSnkrSalePrice(snkr, data.snkr_sale_price)
+        setSnkrRelease(snkr, data.snkr_release)
+    }
+    catch {
+        throw new Error('Error on set snkr data.')
     }
 }
 

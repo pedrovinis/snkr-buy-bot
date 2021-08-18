@@ -38,6 +38,7 @@ const addUser = async() => {
         setNikeAuthCookie(user, authCookie)
         setNikeAuthCreation(user)
         user.setNikePassword('SECRET')
+        user.setNikeSmsPhone('SECRET')
         saveConfigs(user)
 
         console.log(`\n --- ${user.getName()} successful set. --- \n`)
