@@ -5,7 +5,9 @@ const listUsers = require('../user/listUsers')
 const addUser = require('../user/addUser')
 const deleteUser = require('../user/deleteUser')
 const listSnkrs = require('../snkr/listSnkrs')
-const addsnkr = require('../snkr/addSnkr')
+const addSnkr = require('../snkr/addSnkr')
+const deleteSnkr = require('../snkr/deleteSnkr')
+
 
 const checkCommandAndRun = async(c) => {
     switch (c) {
@@ -28,7 +30,10 @@ const checkCommandAndRun = async(c) => {
             listSnkrs()
             break
         case commands.addsnkr:
-            await addsnkr()
+            await addSnkr()
+            break
+        case commands.deletesnkr:
+            deleteSnkr()
             break
         case commands.version:
             version()

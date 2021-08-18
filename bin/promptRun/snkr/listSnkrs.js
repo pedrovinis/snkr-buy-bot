@@ -1,14 +1,14 @@
 const fs = require('fs')
-const { getsnkrsData } = require('./index')
+const { getSnkrsData } = require('./index')
 
-const listsnkrs = () => {
+const listSnkrs = () => {
     try {
         const snkrsFileName = fs.readdirSync('bin/snkrs')
-        const snkrsData = getsnkrsData(snkrsFileName)
-        const formatedsnkrsData = formatsnkrsData(snkrsData)
+        const snkrsData = getSnkrsData(snkrsFileName)
+        const formatedSnkrsData = formatSnkrsData(snkrsData)
 
         console.table(
-            formatedsnkrsData,
+            formatedSnkrsData,
             ['name', 'size', 'price', 'release']
         )
     }
@@ -18,9 +18,9 @@ const listsnkrs = () => {
 
 }
 
-module.exports = listsnkrs
+module.exports = listSnkrs
 
-const formatsnkrsData = (snkrsData) => {
+const formatSnkrsData = (snkrsData) => {
     try {
         const formatedsnkrsData = snkrsData.map( (snkrData) => {
             const formatedDate = formatRelease(snkrData.snkr_release)

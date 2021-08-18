@@ -11,11 +11,11 @@ const deleteUser = () => {
         const index = input('Index: ')
         const fileName = verifyIfIndexExist(index)
         const userData = getUserData(fileName)
-        console.log(`\nDo you really wish delete ---> ${userData.name} <---?`)
+        console.log(`\nDo you really wish delete '${userData.name}'?`)
         const answer = confirmDelete(userData)
         if(answer) { 
             deleteUserFile(fileName)
-            console.log(`${userData.name} successful deleted. \n`)
+            console.log(`'${userData.name}' successful deleted. \n`)
         }
     }
     catch (err) {

@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-const getsnkrsData = (snkrsFileName)=> {
+const getSnkrsData = (snkrsFileName)=> {
     try {
         const snkrsData = snkrsFileName.map( (snkrFileName) => {
             return JSON.parse(fs.readFileSync(`bin/snkrs/${snkrFileName}`, 'utf8'))
@@ -13,7 +13,7 @@ const getsnkrsData = (snkrsFileName)=> {
     }
 }
 
-const getsnkrData = (snkrFileName)=> {
+const getSnkrData = (snkrFileName)=> {
     try {
         return JSON.parse(fs.readFileSync(`bin/snkrs/${snkrFileName}`, 'utf8'))
     }
@@ -23,6 +23,6 @@ const getsnkrData = (snkrFileName)=> {
 }
 
 module.exports = {
-    getsnkrsData,
-    getsnkrData,
+    getSnkrsData,
+    getSnkrData,
 }

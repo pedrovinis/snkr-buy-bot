@@ -9,7 +9,7 @@ class Browser  {
         ]
         this.options = {
             args,
-            headless: false,    
+            headless: true,    
             ignoreHTTPSErrors: true,
             defaultViewport: null,
         }

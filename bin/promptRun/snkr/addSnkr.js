@@ -7,7 +7,7 @@ const LoadingAnimation = require('loading-animation')
 
 let loadAnimation
 
-const addUser = async() => {
+const addSnkr = async() => {
     console.log('\n')
     const snkr = new Snkr()
 
@@ -44,7 +44,7 @@ const addUser = async() => {
     browser.closeBrowser()
 }
 
-module.exports = addUser
+module.exports = addSnkr
 
 const tryGotoSnkrsPage = async(link, page) => {
     try {

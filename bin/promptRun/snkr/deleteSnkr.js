@@ -1,35 +1,34 @@
 const fs = require('fs')
 const { input } = require('../prompt-input')
-const listUsers = require('./listUsers')
-const { getUserData } = require('./index')
+const listSnkrs = require('./listSnkrs')
+const { getSnkrData } = require('./index')
 
-const deleteUser = () => {
-    listUsers()
-    console.log('\nType the index number from user that you want to delete.')
+const deleteSnkr = () => {
+    listSnkrs()
+    console.log('\nType the index number from snkr that you want to delete.')
 
     try {
         const index = input('Index: ')
         const fileName = verifyIfIndexExist(index)
-        const userData = getUserData(fileName)
-        console.log(`\nDo you really wish delete ---> ${userData.name} <---?`)
-        const answer = confirmDelete(userData)
+        const snkrData = getSnkrData(fileName)
+        console.log(`\nDo you really wish delete '${snkrData.snkr_name} - ${snkrData.snkr_size}'?`)
+        const answer = confirmDelete(snkrData)
         if(answer) { 
-            deleteUserFile(fileName)
-            console.log(`${userData.name} successful deleted. \n`)
+            deletesnkrFile(fileName)
+            console.log(`'${snkrData.snkr_name}-${snkrData.snkr_size}' successful deleted. \n`)
         }
     }
     catch (err) {
         console.log(`${err} ✕\n`)
     }
-
 }
 
-module.exports = deleteUser
+module.exports = deleteSnkr
 
 const verifyIfIndexExist = (index) => {
     try {
-        const usersFileName = fs.readdirSync('bin/users')
-        const file = usersFileName[index]
+        const snkrsFileName = fs.readdirSync('bin/snkrs')
+        const file = snkrsFileName[index]
         if(!file) { throw new Error('Index value invalid.') }
         else { return file }
     }
@@ -51,11 +50,11 @@ const confirmDelete = () => {
     }
 }
 
-const deleteUserFile = (userFileName) => {
+const deletesnkrFile = (snkrFileName) => {
     try {
-        fs.unlinkSync(`bin/users/${userFileName}`)
+        fs.unlinkSync(`bin/snkrs/${snkrFileName}`)
     }
     catch {
-        throw new Error('Error on delete user file.')
+        throw new Error('Error on delete snkr file.')
     }
 }
