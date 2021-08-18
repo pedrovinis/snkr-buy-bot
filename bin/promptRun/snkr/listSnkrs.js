@@ -26,9 +26,9 @@ module.exports = listSnkrs
 
 const formatSnkrsData = (snkrsData) => {
     try {
-        const formatedsnkrsData = snkrsData.map( (snkrData) => {
+        const snkrsDataSorted = snkrsData.sort((a, b) => a.snkr_release - b.snkr_release)
+        const formatedSnkrsData = snkrsDataSorted.map( (snkrData) => {
             const formatedDate = formatRelease(snkrData.snkr_release)
-
             return {
                 name: snkrData.snkr_name,
                 size: snkrData.snkr_size,
@@ -36,7 +36,7 @@ const formatSnkrsData = (snkrsData) => {
                 release: formatedDate
             }
         })
-        return formatedsnkrsData
+        return formatedSnkrsData
     }
     catch {
 
@@ -44,7 +44,7 @@ const formatSnkrsData = (snkrsData) => {
 }
 
 const formatRelease = (release) => {
-    if(release=='released') return release
+    if(release < new Date().getTime()/1000) return 'Released'
     const timeStamp = new Date(release * 1000)
     const formatedDate = timeStamp.toLocaleString('pt-BR')
     return formatedDate
