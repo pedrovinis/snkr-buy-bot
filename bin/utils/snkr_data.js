@@ -43,9 +43,12 @@ const formatSnkrAjaxResponse = async(ajaxResponse) => {
     const data = await ajaxResponse.json()
     const countDown = getCountDown(data.DetalheProduto)
     const timeNow = data.Hora
-    const release = timeNow + countDown
+    const release = () => { 
+        if (countDown <= 0) return 'Released'
+        else return timeNow + countDown
+    }
     return {
-        snkr_release: release
+        snkr_release: release()
     }
 }
 

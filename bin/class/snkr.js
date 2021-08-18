@@ -64,11 +64,11 @@ class snkr {
     }
 
     setSnkrRelease(time) {
-        this.snkrData['snkr_release_on'] = time
+        this.snkrData['snkr_release'] = time
     }
 
     getSnkrRelease() {
-        return this.snkrData['snkr_release_on']
+        return this.snkrData['snkr_release']
     }
 
     setSnkrSalePrice(salePrice) {

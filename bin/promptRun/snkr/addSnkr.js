@@ -25,14 +25,13 @@ const addUser = async() => {
         loadAnimation.stop('DONE. ✓ ')
         console.table(Object.keys(data.sizes))
         askAndSetSnkrSize(snkr, data.sizes)
-
         setSnkrName(snkr, data.snkr_name)
         setSnkrId(snkr, data.snkr_id)
         setSnkrSizeId(snkr, data.sizes[snkr.getSnkrSize()].ProdutoId)
         setSnkrSizeCode(snkr, data.sizes[snkr.getSnkrSize()].Codigo)
         setSnkrSalePrice(snkr, data.snkr_sale_price)
         setSnkrRelease(snkr, data.snkr_release)
-
+        
         snkr.saveConfigs()
 
         console.log(`\n --- ${snkr.getSnkrName()} Size ${snkr.getSnkrSize()} successful set. --- \n`)
