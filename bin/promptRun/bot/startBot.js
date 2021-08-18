@@ -1,8 +1,13 @@
-const User = require('../../class/user')
 const Browser = require('../../class/browser')
 const Page = require('../../class/page')
 const LoadingAnimation = require('loading-animation')
-const { input } = require('../prompt-input')
+
+const listUsers = require('../user/listUsers')
+const selectUser = require('../user/selectUser')
+
+const listSnkrs = require('../snkr/listSnkrs')
+const selectSnkr = require('../snkr/selectSnkr')
+
 const { 
     fetchAddCart, 
     fetchTwoFactorGenerate, 
@@ -17,7 +22,7 @@ const {
 } = require('../../utils/nike_login')
 
 const startBot = async () => {
-
+    
     // const b1 = await new Browser()
     // const page = await new Page(b1.getBrowser())
     // await gotoLoginPage(page)
@@ -42,4 +47,3 @@ const startBot = async () => {
 }
 
 module.exports = startBot
-

@@ -1,3 +1,11 @@
+const nikeLogin = async(page, user) => {
+    await gotoLoginPage(page)
+    const clientId = await getClientIdByUrl(page.url())
+    const resNikeLogin = await fetchLogin(page, user.getNikeEmail(), user.getNikePassword(), clientId)
+    const authToken = await getLoginAuthToken(resNikeLogin)
+    await validateLoginAuthToken(page, authToken)
+}
+
 const gotoLoginPage = async(page) => {
     await page.goto('https://www.nike.com.br/api/v2/auth/nike-unite/set?code=&state=/')
     await page.click('[type="button"]')
@@ -12,7 +20,7 @@ const getClientIdByUrl = async (url) => {
     return clientID
 }
 
-const fetchLogin = async (email, password, client_id, page) => {
+const fetchLogin = async (page, email, password, client_id) => {
     page.page.evaluate( (email, password, client_id) => {
         fetch("https://unite.nike.com.br/partnerLogin?appVersion=905&experienceVersion=905&uxid=com.nike.commerce.nikedotcom.brazil.oauth.web&locale=pt_BR&backendEnvironment=identity&browser=Google%20Inc.&os=undefined&mobile=false&native=false&visit=1&visitor=", {
         "headers": {
@@ -60,11 +68,16 @@ const setAuthCookie = async (page, authCookie)=> {
     })
 }
 
+const getAuthCookieValue = async(page) => {
+    const allCookies = await page.getCookies()
+    const authCookie = allCookies.find( (cookie) => {
+        return cookie.name == 'IFCSHOPSESSID'
+    })
+    return authCookie.value
+}
+
 module.exports = {
-    gotoLoginPage,
-    getClientIdByUrl,
-    fetchLogin,
-    getLoginAuthToken,
-    validateLoginAuthToken,
-    setAuthCookie
+    nikeLogin,
+    setAuthCookie,
+    getAuthCookieValue
 }

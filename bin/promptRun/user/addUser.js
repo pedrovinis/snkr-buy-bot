@@ -1,6 +1,5 @@
 const { input, secretInput } = require('../prompt-input')
-const fs = require('fs')
-const login = require('../../utils/nike_login')
+const { nikeLogin, setAuthCookie, getAuthCookieValue} = require('../../utils/nike_login')
 const User = require('../../class/user')
 const Browser = require('../../class/browser')
 const Page = require('../../class/page')
@@ -16,29 +15,22 @@ const addUser = async() => {
     askAndSetEmail(user)
     askAndSetPassword(user)
 
-    loadAnimation = new LoadingAnimation(['Loading login page ',' '],)
+    loadAnimation = new LoadingAnimation(['Starting connection ',' '],)
     const browser = await new Browser()
+    const page = await new Page(browser.getBrowser())
+    loadAnimation.stop('DONE. ✓ ')
 
     try {
-        const page = await new Page(browser.getBrowser())
-        await gotoNikeLoginPage(page)
+        loadAnimation = new LoadingAnimation(['Trying to login ',' '],)
+        await nikeLogin(page, user)
         loadAnimation.stop('DONE. ✓ ')
 
-        loadAnimation = new LoadingAnimation(['Getting get Nike Auth Token ',' '],)
-        const clientId = await getNikeClientIdByUrl(page.url())
-        const resNikeLogin = await fetchNikeLogin(page, user, clientId)
-        const authToken = await getNikeLoginAuthToken(resNikeLogin)
-        loadAnimation.stop('DONE. ✓ ')
-
-        loadAnimation = new LoadingAnimation(['Validating Nike Auth Token',' '],)
-        await validateNikeLogin(page, authToken)
-        loadAnimation.stop('DONE. ✓ ')
-        
         const authCookie = await getAuthCookieValue(page)
-        setNikeAuthCookie(user, authCookie)
         setNikeAuthCreation(user)
+        user.setiNike_auth_session_cookie(authCookie)
         user.setNikePassword('SECRET')
         user.setNikeSmsPhone('SECRET')
+        
         saveConfigs(user)
 
         console.log(`\n --- ${user.getName()} successful set. --- \n`)
@@ -115,60 +107,6 @@ const setPassword = (user, password) => {
     } 
 }
 
-const gotoNikeLoginPage = async(page) => {
-    try {
-        await login.gotoLoginPage(page)
-    }
-    catch {
-        console.log('Error on get Login Page')
-        console.log('Tryng again...')
-        await new Promise(r => setTimeout(r, 6000))
-        await gotoLoginPage(page)
-    }
-}
-
-const getNikeClientIdByUrl = async(url) => {
-    try {
-        const clientId = await login.getClientIdByUrl(url)
-        return clientId
-    }
-    catch {
-        throw new Error('Error on get Nike client id.')
-    }
-}
-
-const fetchNikeLogin = async(page, user, clientId) => {
-    try {
-        const email = user.getNikeEmail()
-        const password = user.getNikePassword()
-        const res = await login.fetchLogin(email, password, clientId, page)
-        if(res.status()!= 200) throw new Error('Error on fetch Nike Login. Your credentials may be wrong.')
-        return res
-    }
-    catch {
-        throw new Error('Error on fetch Nike Login.')
-    }
-}
-
-const getNikeLoginAuthToken = async(fetchLoginResponse) => {
-    try {
-        const authToken = await login.getLoginAuthToken(fetchLoginResponse)
-        return authToken
-    }
-    catch {
-        throw new Error('Error on get Nike auth token.')
-    }
-}
-
-const validateNikeLogin = async(page, authToken) => {
-    try {
-        await login.validateLoginAuthToken(page, authToken)
-    }
-    catch {
-        throw new Error('Error on validate Nike login.')
-    }
-}
-
 const setNikeAuthCookie = (user, authToken) => {
     try {
         user.setiNike_auth_session_cookie(authToken)
@@ -188,18 +126,7 @@ const setNikeAuthCreation = (user) => {
     }
 }
 
-const getAuthCookieValue = async(page) => {
-    try {
-        const allCookies = await page.getCookies()
-        const authCookie = allCookies.find( (cookie) => {
-            return cookie.name == 'IFCSHOPSESSID'
-        })
-        return authCookie.value
-    }
-    catch {
-        throw new Error('Error on get Nike auth token.')
-    }
-}
+
 
 const saveConfigs = (user) => {
     try {

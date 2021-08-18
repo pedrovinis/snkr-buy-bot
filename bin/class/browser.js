@@ -9,9 +9,7 @@ class Browser  {
         ]
         this.options = {
             args,
-            headless: true,    
-            ignoreHTTPSErrors: true,
-            defaultViewport: null,
+            headless: true
         }
         return (async () => {
             await this.startBrowser()
