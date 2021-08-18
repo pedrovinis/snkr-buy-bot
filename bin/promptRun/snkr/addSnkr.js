@@ -129,7 +129,7 @@ const setSnkrSalePrice = (snkr, price) => {
     }
 }
 
-const setSnkRrelease = (snkr, release) => {
+const setSnkrRelease = (snkr, release) => {
     try {
         snkr.setSnkrRelease(release)
     }

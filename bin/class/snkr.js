@@ -63,11 +63,11 @@ class snkr {
         return this.snkrData['snkr_size_code']
     }
 
-    setSnkrreleaseOn(time) {
+    setSnkrRelease(time) {
         this.snkrData['snkr_release_on'] = time
     }
 
-    getSnkrreleaseOn() {
+    getSnkrRelease() {
         return this.snkrData['snkr_release_on']
     }
 
