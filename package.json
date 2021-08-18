@@ -1,0 +1,25 @@
+{
+  "name": "snkr-buy-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "esm": "^3.2.25",
+    "loading-animation": "0.0.2-c",
+    "prompt-sync": "^4.2.0",
+    "puppeteer": "^10.2.0",
+    "puppeteer-extra": "^3.1.18",
+    "puppeteer-extra-plugin-stealth": "^2.7.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node -r esm index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "pkg": {
+    "assets": [
+      "node_modules/puppeteer-extra-plugin-stealth/**/*.*"
+    ]
+  }
+}
