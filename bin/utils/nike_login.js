@@ -52,10 +52,19 @@ const validateLoginAuthToken = async (page, authToken) => {
     await page.goto(`https://www.nike.com.br/api/v2/auth/nike-unite/set?code=${authToken}&state=/`) //Auto redirect to Nike Home if got sucess.
 }
 
+const setAuthCookie = async (page, authCookie)=> {
+    await page.setCookie({
+        'name': 'IFCSHOPSESSID',
+        'value': authCookie,
+        'domain': '.nike.com.br'
+    })
+}
+
 module.exports = {
     gotoLoginPage,
     getClientIdByUrl,
     fetchLogin,
     getLoginAuthToken,
-    validateLoginAuthToken
+    validateLoginAuthToken,
+    setAuthCookie
 }
