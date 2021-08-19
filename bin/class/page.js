@@ -65,6 +65,11 @@ class Page {
     async close() {
         await this.page.close()
     }
+
+    async closeNow() {
+        await this.page.evaluate(() => window.stop())
+        this.page.close()
+    }
 }
 
 module.exports = Page

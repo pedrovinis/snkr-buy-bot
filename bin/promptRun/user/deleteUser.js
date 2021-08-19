@@ -12,7 +12,7 @@ const deleteUser = () => {
         const fileName = verifyIfIndexExist(index)
         const userData = getUserData(fileName)
         console.log(`\nDo you really wish delete '${userData.name}'?`)
-        const answer = confirmDelete(userData)
+        const answer = confirmDelete()
         if(answer) { 
             deleteUserFile(fileName)
             console.log(`'${userData.name}' successful deleted. \n`)

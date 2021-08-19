@@ -1,15 +1,18 @@
-const nikeLogin = async(page, user) => {
+const Page = require('../class/page')
+
+const nikeLogin = async(browser, user) => {
+    const page = await new Page(browser.getBrowser())
     await gotoLoginPage(page)
     const clientId = await getClientIdByUrl(page.url())
     const resNikeLogin = await fetchLogin(page, user.getNikeEmail(), user.getNikePassword(), clientId)
     const authToken = await getLoginAuthToken(resNikeLogin)
     await validateLoginAuthToken(page, authToken)
+    page.closeNow()
 }
 
 const gotoLoginPage = async(page) => {
     await page.goto('https://www.nike.com.br/api/v2/auth/nike-unite/set?code=&state=/')
     await page.click('[type="button"]')
-    await page.waitFor('[type="button"]')
 }
 
 const getClientIdByUrl = async (url) => {
@@ -60,6 +63,22 @@ const validateLoginAuthToken = async (page, authToken) => {
     await page.goto(`https://www.nike.com.br/api/v2/auth/nike-unite/set?code=${authToken}&state=/`) //Auto redirect to Nike Home if got sucess.
 }
 
+const verifyLogged = async(browser) => {
+    const page = await new Page(browser.getBrowser())
+    page.goto('https://www.nike.com.br/')
+    
+    const ajaxRes = await getAjaxResponse(page)
+    const data = await ajaxRes.json()
+
+    page.closeNow()
+
+    return data.Logado
+}
+
+const getAjaxResponse = async(page) => {
+    const res = await page.waitForSpecificResponse('https://www.nike.com.br/Requisicao/Ajax')
+    return res
+}
 const setAuthCookie = async (page, authCookie)=> {
     await page.setCookie({
         'name': 'IFCSHOPSESSID',
@@ -78,6 +97,7 @@ const getAuthCookieValue = async(page) => {
 
 module.exports = {
     nikeLogin,
+    verifyLogged,
     setAuthCookie,
     getAuthCookieValue
 }

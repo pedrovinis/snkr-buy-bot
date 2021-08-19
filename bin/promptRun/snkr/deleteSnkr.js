@@ -12,7 +12,7 @@ const deleteSnkr = () => {
         const fileName = verifyIfIndexExist(index)
         const snkrData = getSnkrData(fileName)
         console.log(`\nDo you really wish delete '${snkrData.snkr_name} - ${snkrData.snkr_size}'?`)
-        const answer = confirmDelete(snkrData)
+        const answer = confirmDelete()
         if(answer) { 
             deletesnkrFile(fileName)
             console.log(`'${snkrData.snkr_name} - ${snkrData.snkr_size}' successful deleted. \n`)

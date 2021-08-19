@@ -1,8 +1,7 @@
 const { input, secretInput } = require('../prompt-input')
-const { nikeLogin, setAuthCookie, getAuthCookieValue} = require('../../utils/nike_login')
+const { nikeLogin, verifyLogged, getAuthCookieValue} = require('../../utils/nike_login')
 const User = require('../../class/user')
 const Browser = require('../../class/browser')
-const Page = require('../../class/page')
 const LoadingAnimation = require('loading-animation')
 
 let loadAnimation
@@ -17,17 +16,15 @@ const addUser = async() => {
 
     loadAnimation = new LoadingAnimation(['Starting connection ',' '],)
     const browser = await new Browser()
-    const page = await new Page(browser.getBrowser())
     loadAnimation.stop('DONE. ✓ ')
 
     try {
         loadAnimation = new LoadingAnimation(['Trying to login ',' '],)
-        await nikeLogin(page, user)
+        await nikeLogin(browser, user)
+        await verifyIfIsLogged(browser)
         loadAnimation.stop('DONE. ✓ ')
 
-        const authCookie = await getAuthCookieValue(page)
         setNikeAuthCreation(user)
-        user.setiNike_auth_session_cookie(authCookie)
         user.setNikePassword('SECRET')
         user.setNikeSmsPhone('SECRET')
         
@@ -67,13 +64,13 @@ const setName = (user, name) => {
     }
 }
 
-askAndSetEmail = (user) => {
+const askAndSetEmail = (user) => {
     try {
         const iEmail = input('Type your NIKE email: ')
         setEmail(user, iEmail)
     } 
     catch {
-        askAndSetEmail()
+        askAndSetEmail(user)
     }
 }
 
@@ -89,7 +86,7 @@ const setEmail = (user, email) => {
 
 const askAndSetPassword = (user) => {
     try {
-        const iPassword = secretInput('Type your NIKE password:')
+        const iPassword = secretInput('Type your NIKE password: ')
         setPassword(user, iPassword)
     }
     catch {
@@ -107,12 +104,13 @@ const setPassword = (user, password) => {
     } 
 }
 
-const setNikeAuthCookie = (user, authToken) => {
+const verifyIfIsLogged = async(browser) => {
     try {
-        user.setiNike_auth_session_cookie(authToken)
+        const isLogged = await verifyLogged(browser)
+        if(!isLogged) throw new Error()
     }
     catch {
-        throw new Error('Error on set Nike auth token.')
+        throw new Error('Error not logged')
     }
 }
 
@@ -125,8 +123,6 @@ const setNikeAuthCreation = (user) => {
         throw new Error('Error on set Nike Auth Creation.')
     }
 }
-
-
 
 const saveConfigs = (user) => {
     try {
