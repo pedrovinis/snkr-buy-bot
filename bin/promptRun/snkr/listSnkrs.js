@@ -26,8 +26,8 @@ module.exports = listSnkrs
 
 const formatSnkrsData = (snkrsData) => {
     try {
-        // const snkrsDataSorted = snkrsData.sort((a, b) => a.snkr_release - b.snkr_release)
-        const formatedSnkrsData = snkrsData.map( (snkrData) => {
+        const snkrsDataSorted = snkrsData.sort((a, b) => a.snkr_release - b.snkr_release)
+        const formatedSnkrsData = snkrsDataSorted.map( (snkrData) => {
             const formatedDate = formatRelease(snkrData.snkr_release)
             return {
                 name: snkrData.snkr_name,

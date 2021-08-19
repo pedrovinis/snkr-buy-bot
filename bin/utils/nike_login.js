@@ -7,7 +7,7 @@ const nikeLogin = async(browser, user) => {
     const resNikeLogin = await fetchLogin(page, user.getNikeEmail(), user.getNikePassword(), clientId)
     const authToken = await getLoginAuthToken(resNikeLogin)
     await validateLoginAuthToken(page, authToken)
-    page.closeNow()
+    await page.closeNow()
 }
 
 const gotoLoginPage = async(page) => {
@@ -70,7 +70,7 @@ const verifyLogged = async(browser) => {
     const ajaxRes = await getAjaxResponse(page)
     const data = await ajaxRes.json()
 
-    page.closeNow()
+    await page.closeNow()
 
     return data.Logado
 }
@@ -79,6 +79,7 @@ const getAjaxResponse = async(page) => {
     const res = await page.waitForSpecificResponse('https://www.nike.com.br/Requisicao/Ajax')
     return res
 }
+
 const setAuthCookie = async (page, authCookie)=> {
     await page.setCookie({
         'name': 'IFCSHOPSESSID',
@@ -87,11 +88,14 @@ const setAuthCookie = async (page, authCookie)=> {
     })
 }
 
-const getAuthCookieValue = async(page) => {
+const getAuthCookieValue = async(browser) => {
+    const page = await new Page(browser.getBrowser())
+    await page.goto('https://www.nike.com.br/')
     const allCookies = await page.getCookies()
     const authCookie = allCookies.find( (cookie) => {
         return cookie.name == 'IFCSHOPSESSID'
     })
+    await page.closeNow()
     return authCookie.value
 }
 

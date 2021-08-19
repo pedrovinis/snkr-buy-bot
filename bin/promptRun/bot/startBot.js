@@ -16,13 +16,18 @@ const {
     fetchTwoFactorValidate
 } = require('../../utils/nike_buy_snkr')
 
-const { nikeLogin, verifyLogged } = require('../../utils/nike_login')
+const { nikeLogin, verifyLogged, getAuthCookieValue, setAuthCookie } = require('../../utils/nike_login')
 const { input, secretInput } = require('../prompt-input')
 
 const sleep = ms => new Promise(
     resolve => setTimeout(resolve, ms));
 
 let loadAnim
+let loginAttemps = 0
+
+let loginTime = botCfg.login_before_drop_minutes * 60
+let startBrowserTime = 1 * 60 
+let dropTime = 0
 
 const startBot = async () => {
     try {
@@ -38,28 +43,52 @@ const startBot = async () => {
         const snkrLink = snkrData.snkr_link
         const sizeCode = snkrData.snkr_size_code
         const sizeId = snkrData.snkr_size_id
-    
-        await waitForLoginTime(snkrData.snkr_release)
-    
-        loadAnim = new LoadingAnimation(['Trying to login in nike website ',' '],)
-        const browser = await new Browser({headless:false})
-        await nikeLogin(browser, user)
-        const page = await new Page(browser.getBrowser({}))
-        await page.goto('https://www.nike.com.br/')
-        loadAnim.stop('DONE. ✓ ')
-    
-        await waitForDropTime(snkrData.snkr_release)
         
-        await fetchAddCart(snkrLink, sizeCode, page)
-        await fetchTwoFactorGenerate(snkrLink, sizeId, user.getNikeSmsPhone(), page)
-        const vCode = input('Cellphone verification code: ')
-        await fetchTwoFactorValidate(snkrLink, sizeId, vCode, page)
-        await fetchAddCart(snkrLink, sizeCode, page)
-    
-        const checkoutPage = await new Page(browser.getBrowser())
-        checkoutPage.goto('https://www.nike.com.br/checkout')
+        await waitFor(snkrData.snkr_release, loginTime)
+
+        loadAnim = new LoadingAnimation(['Trying to login in nike website ',' '],)
+        const b1 = await new Browser()
+        await nikeLogin(b1, user)
+        await verifyIfIsLogged(b1)
+        loadAnim.stop('DONE. ✓ ')
+
+        loadAnim = new LoadingAnimation(['Trying fetch login data nike website ',' '],)
+        const authCookie = await getAuthCookieValue(b1)
+        user.setiNike_auth_session_cookie(authCookie)
+        await b1.closeBrowser()
+        loadAnim.stop('DONE. ✓ ')
+        
+        await waitFor(snkrData.snkr_release, startBrowserTime)
+
+        loadAnim = new LoadingAnimation(['Preparing to drop ',' '],)
+        const b2 = await new Browser({headless:false})
+        const nikehomePage = await new Page(b2.getBrowser())
+        await nikehomePage.goto('https://www.nike.com.br/')
+        await setAuthCookie(nikehomePage, authCookie)
+        await nikehomePage.refresh()
+        loadAnim.stop('DONE. ✓ ')
+
+        await waitFor(snkrData.snkr_release, dropTime)
+        
+        loadAnim = new LoadingAnimation(['Requesting SMS verification ',' '],)
+        await fetchAddCart(snkrLink, sizeCode, nikehomePage)
+        await fetchTwoFactorGenerate(snkrLink, sizeId, user.getNikeSmsPhone(), nikehomePage)
+        loadAnim.stop('DONE. ✓ ')
+
+        console.log('\n')
+
+        const vCode = input('SMS verification code: ')
+
+        loadAnim = new LoadingAnimation(['Validating SMS code ',' '],)
+        await fetchTwoFactorValidate(snkrLink, sizeId, vCode, nikehomePage)
+        await fetchAddCart(snkrLink, sizeCode, nikehomePage)
+        loadAnim.stop('DONE. ✓ ')
+        
+        const checkoutPage = await new Page(b2.getBrowser())
+        await checkoutPage.goto('https://www.nike.com.br/checkout')
     }
     catch (err) {
+        loadAnim.stop('ERROR. ✕ ')
         console.log(`${err} ✕\n`)
     }
 }
@@ -67,9 +96,9 @@ const startBot = async () => {
 module.exports = startBot
 
 
-const waitForLoginTime = async(snkrDropTime) => {
+const waitFor = async(snkrDropTime, time) => {
     let cont = parseInt(snkrDropTime - ( new Date().getTime() / 1000 ))
-    while(cont > botCfg.login_before_drop_minutes * 60) {
+    while(cont > time) {
         cont --
         process.stdout.clearLine()
         process.stdout.cursorTo(0)
@@ -78,13 +107,12 @@ const waitForLoginTime = async(snkrDropTime) => {
     }
 }
 
-const waitForDropTime = async(snkrDropTime) => {
-    let cont = parseInt(snkrDropTime - ( new Date().getTime() / 1000 ))
-    while(cont > 0) {
-        cont --
-        process.stdout.clearLine()
-        process.stdout.cursorTo(0)
-        process.stdout.write(`Time remaining to drop: '${cont} seconds' `)
-        await sleep(1000)
+const verifyIfIsLogged = async(browser) => {
+    try {
+        const isLogged = await verifyLogged(browser)
+        if(!isLogged) throw new Error()
+    }
+    catch {
+        throw new Error('Error not logged')
     }
 }

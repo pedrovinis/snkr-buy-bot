@@ -37,7 +37,7 @@ const addUser = async() => {
         console.log(`${err} ✕\n`)
     }
 
-    browser.closeBrowser()
+   browser.closeBrowser()
 }
 
 module.exports = addUser
