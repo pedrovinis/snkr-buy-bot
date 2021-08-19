@@ -28,7 +28,7 @@ const addSnkr = async() => {
         console.table(Object.keys(data.sizes))
         askAndSetSnkrSize(snkr, data.sizes)
         setSnkrData(data, snkr)
-        
+
         snkr.saveConfigs()
 
         console.log(`\n --- ${snkr.getSnkrName()} Size ${snkr.getSnkrSize()} successful set. --- \n`)

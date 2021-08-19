@@ -29,6 +29,7 @@ let loginTime = botCfg.login_before_drop_minutes * 60
 let startBrowserTime = 1 * 60 
 let dropTime = 0
 
+const prompt = require('prompt-sync')()
 const startBot = async () => {
     try {
         const user = new User()

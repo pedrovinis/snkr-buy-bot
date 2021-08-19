@@ -11,7 +11,7 @@ const getAndFormatSnkrData = async(page) => {
     const formatedDataLayer =  await formatSnkrDataLayerResponse(resDataLayer)
     const formatedAjax = await formatSnkrAjaxResponse(resAjax)
     
-    page.closeNow()
+    await page.closeNow()
 
     return {
         snkr_name: formatedDataLayer.snkr_name,
