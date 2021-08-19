@@ -1,4 +1,4 @@
-const { commands } = require('./commands.json')
+const commands = require('./commands.json')
 const config = require('../../config.json')
 const startBot = require('../bot/startBot')
 const listUsers = require('../user/listUsers')
@@ -68,7 +68,7 @@ const help = () => {
         { command: commands.deletesnkr, description: 'Delete snkr info.'}, 
         { command: commands.version, description: 'Show actual Version.'},
         { command: commands.clear, description: 'Clear the application console.'},
-        { command: `${commands.exit}`, description: 'Exit the program.'}, 
+        { command: `${commands.exit}`, description: 'Exit the program.'},
     ], 
     ['command', 'description'])
 }

@@ -1,5 +1,5 @@
 const config = require('../config.json')
-const { commands } = require('./commands/commands.json')
+const commands = require('./commands/commands.json')
 const { input } = require('./prompt-input')
 const checkCommandAndRun = require('./commands/runCommand')
 

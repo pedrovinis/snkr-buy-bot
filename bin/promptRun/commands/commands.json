@@ -1,17 +1,14 @@
 {
-    "commands": {
-        "start" : "-start",
-        "users" : "-users",
-        "revalidate": "-revalidate",
-        "adduser": "-adduser",
-        "deleteuser": "-deleteuser",
-        "snkrs": "-snkrs",
-        "addsnkr": "-addsnkr",
-        "deletesnkr": "-deletesnkr",
-        "help" : "-help",
-        "version" : "-v",
-        "clear": "-clear",
-        "exit": "-exit",
-        "quit": "-quit"
-    }
+    "start" : "-start",
+    "users" : "-users",
+    "adduser": "-adduser",
+    "deleteuser": "-deleteuser",
+    "snkrs": "-snkrs",
+    "addsnkr": "-addsnkr",
+    "deletesnkr": "-deletesnkr",
+    "help" : "-help",
+    "version" : "-v",
+    "clear": "-clear",
+    "exit": "-exit",
+    "quit": "-quit"
 }
